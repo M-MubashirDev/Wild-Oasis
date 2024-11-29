@@ -9,6 +9,9 @@ import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
+import { useBooked } from "./useBookeds";
+import { HiCash } from "react-icons/hi";
+import { useCheckOut } from "./useCheckOut";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -17,9 +20,11 @@ const HeadingGroup = styled.div`
 `;
 
 function BookingDetail() {
-  const booking = {};
-  const status = "checked-in";
+  // const booking = {};
+  const { checkedOut, isCheckedOut } = useCheckOut();
 
+  const status = "checked-in";
+  const { bookedData, isbookedLoad } = useBooked();
   const moveBack = useMoveBack();
 
   const statusToTagName = {
@@ -38,12 +43,22 @@ function BookingDetail() {
         <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
       </Row>
 
-      <BookingDataBox booking={booking} />
+      <BookingDataBox booking={bookedData} isbookedLoad={isbookedLoad} />
 
       <ButtonGroup>
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>
+        {status === "checked-in" ? (
+          <Button
+            disabled={isCheckedOut}
+            onClick={() => checkedOut(bookedData.id)}
+          >
+            <HiCash />
+          </Button>
+        ) : (
+          ""
+        )}
       </ButtonGroup>
     </>
   );

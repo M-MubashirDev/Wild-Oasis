@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 function useCreateCabin() {
   const queryClient = useQueryClient();
-  const { mutate: CreateCabin, isloading: isInserted } = useMutation({
+  const { mutate: CreateCabin, isLoading: isInserted } = useMutation({
     mutationFn: insertCabin,
     onSuccess: function () {
       toast.success("inserted successfully");

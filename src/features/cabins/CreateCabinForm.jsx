@@ -9,7 +9,7 @@ import useCreateCabin from "./useCreateCabin";
 import useEditCabin from "./useEditCabin";
 // import { da } from "date-fns/locale";
 
-function CreateCabinForm({ editCabin = {} }) {
+function CreateCabinForm({ editCabin = {}, onClose }) {
   const { id: cabinId } = editCabin;
   const {
     register,
@@ -39,8 +39,7 @@ function CreateCabinForm({ editCabin = {} }) {
       : CreateCabin(
           { ...data, image },
           {
-            onSuccess: (data) => {
-              console.log(data);
+            onSuccess: () => {
               reset();
             },
           }
@@ -48,7 +47,10 @@ function CreateCabinForm({ editCabin = {} }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onsubmit)}>
+    <Form
+      onSubmit={handleSubmit(onsubmit)}
+      type={onClose ? "modal" : "regular"}
+    >
       <FormRows label="Cabin name" errors={errors?.name?.message}>
         <Input
           type="text"
@@ -119,7 +121,7 @@ function CreateCabinForm({ editCabin = {} }) {
 
       <FormRows>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button variation="secondary" type="reset" onClick={() => onClose?.()}>
           Cancel
         </Button>
         <Button disabled={isInserted}>Edit cabin</Button>

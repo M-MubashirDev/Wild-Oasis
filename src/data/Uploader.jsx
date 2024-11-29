@@ -4,7 +4,7 @@ import supabase from "../services/supabase";
 import Button from "../ui/Button";
 import { subtractDates } from "../utils/helpers";
 
-import { bookings } from "./data-bookings";
+import { Bookings } from "./data-Bookings";
 import { cabins } from "./data-cabins";
 import { guests } from "./data-guests";
 
@@ -26,7 +26,7 @@ async function deleteCabins() {
 }
 
 async function deleteBookings() {
-  const { error } = await supabase.from("bookings").delete().gt("id", 0);
+  const { error } = await supabase.from("Bookings").delete().gt("id", 0);
   if (error) console.log(error.message);
 }
 
@@ -41,62 +41,62 @@ async function createCabins() {
 }
 
 async function createBookings() {
-  // Bookings need a guestId and a cabinId. We can't tell Supabase IDs for each object, it will calculate them on its own. So it might be different for different people, especially after multiple uploads. Therefore, we need to first get all guestIds and cabinIds, and then replace the original IDs in the booking data with the actual ones from the DB
+  // Bookings need a guestid and a cabinid. We can't tell Supabase IDs for each object, it will calculate them on its own. So it might be different for different people, especially after multiple uploads. Therefore, we need to first get all guestids and cabinids, and then replace the original IDs in the Booking data with the actual ones from the DB
   const { data: guestsIds } = await supabase
     .from("guests")
     .select("id")
     .order("id");
-  const allGuestIds = guestsIds.map((cabin) => cabin.id);
+  const allGuestids = guestsIds.map((cabin) => cabin.id);
   const { data: cabinsIds } = await supabase
     .from("cabins")
     .select("id")
     .order("id");
-  const allCabinIds = cabinsIds.map((cabin) => cabin.id);
+  const allCabinids = cabinsIds.map((cabin) => cabin.id);
 
-  const finalBookings = bookings.map((booking) => {
+  const finalBookings = Bookings.map((Booking) => {
     // Here relying on the order of cabins, as they don't have and ID yet
-    const cabin = cabins.at(booking.cabinId - 1);
-    const numNights = subtractDates(booking.endDate, booking.startDate);
-    const cabinPrice = numNights * (cabin.regularPrice - cabin.discount);
-    const extrasPrice = booking.hasBreakfast
-      ? numNights * 15 * booking.numGuests
+    const cabin = cabins.at(Booking.cabinid - 1);
+    const numNight = subtractDates(Booking.endDate, Booking.startDate);
+    const cabinPrice = numNight * (cabin.regularPrice - cabin.discount);
+    const extrasPrice = Booking.hasBreakfast
+      ? numNight * 15 * Booking.numGuests
       : 0; // hardcoded breakfast price
     const totalPrice = cabinPrice + extrasPrice;
 
     let status;
     if (
-      isPast(new Date(booking.endDate)) &&
-      !isToday(new Date(booking.endDate))
+      isPast(new Date(Booking.endDate)) &&
+      !isToday(new Date(Booking.endDate))
     )
       status = "checked-out";
     if (
-      isFuture(new Date(booking.startDate)) ||
-      isToday(new Date(booking.startDate))
+      isFuture(new Date(Booking.startDate)) ||
+      isToday(new Date(Booking.startDate))
     )
       status = "unconfirmed";
     if (
-      (isFuture(new Date(booking.endDate)) ||
-        isToday(new Date(booking.endDate))) &&
-      isPast(new Date(booking.startDate)) &&
-      !isToday(new Date(booking.startDate))
+      (isFuture(new Date(Booking.endDate)) ||
+        isToday(new Date(Booking.endDate))) &&
+      isPast(new Date(Booking.startDate)) &&
+      !isToday(new Date(Booking.startDate))
     )
       status = "checked-in";
 
     return {
-      ...booking,
-      numNights,
+      ...Booking,
+      numNight,
       cabinPrice,
       extrasPrice,
       totalPrice,
-      guestId: allGuestIds.at(booking.guestId - 1),
-      cabinId: allCabinIds.at(booking.cabinId - 1),
+      guestid: allGuestids.at(Booking.guestid - 1),
+      cabinid: allCabinids.at(Booking.cabinid - 1),
       status,
     };
   });
 
   console.log(finalBookings);
 
-  const { error } = await supabase.from("bookings").insert(finalBookings);
+  const { error } = await supabase.from("Bookings").insert(finalBookings);
   if (error) console.log(error.message);
 }
 
@@ -145,7 +145,7 @@ function Uploader() {
       </Button>
 
       <Button onClick={uploadBookings} disabled={isLoading}>
-        Upload bookings ONLY
+        Upload Bookings ONLY
       </Button>
     </div>
   );

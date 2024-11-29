@@ -52,7 +52,7 @@ function MainNav() {
           <Link to="/dashboard">Home</Link>
         </li>
         <li>
-          <Link to="/booking">Bookings</Link>
+          <Link to="/bookings">Bookings</Link>
         </li>
         <li>
           <Link to="/cabin">Cabins</Link>

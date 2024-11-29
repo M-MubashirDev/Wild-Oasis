@@ -33,7 +33,7 @@ function ConfirmDelete({ resourceName, onConfirm, disabled }) {
         <Button variation="secondary" disabled={disabled}>
           Cancel
         </Button>
-        <Button variation="danger" disabled={disabled}>
+        <Button variation="danger" onClick={onConfirm} disabled={disabled}>
           Delete
         </Button>
       </div>

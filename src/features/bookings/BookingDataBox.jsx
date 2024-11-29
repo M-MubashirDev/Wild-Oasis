@@ -9,7 +9,7 @@ import {
 
 import DataItem from "../../ui/DataItem";
 import { Flag } from "../../ui/Flag";
-
+import Spinner from "../../ui/Spinner";
 import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
 
 const StyledBookingDataBox = styled.section`
@@ -102,7 +102,9 @@ const Footer = styled.footer`
 `;
 
 // A purely presentational component
-function BookingDataBox({ booking }) {
+function BookingDataBox({ booking, isbookedLoad }) {
+  // console.log(booking);
+  if (isbookedLoad) return <Spinner />;
   const {
     created_at,
     startDate,

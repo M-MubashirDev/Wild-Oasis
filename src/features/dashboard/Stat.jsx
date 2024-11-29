@@ -3,6 +3,7 @@ import styled from "styled-components";
 const StyledStat = styled.div`
   /* Box */
   background-color: var(--color-grey-0);
+  background-color: var(--);
   border: 1px solid var(--color-grey-100);
   border-radius: var(--border-radius-md);
 
